@@ -76,6 +76,9 @@ python train_law.py
 原模型和微调150步后比对
 <img src="imgs/qwen-sft150.png">
 
+微调1800步效果
+<img src="imgs/qwen-sft1800.png">
+
 ## 注意事项
 
 ### 免责声明
