@@ -1,8 +1,12 @@
 # qwen3-law-assistant
 - **项目地址**: [qwen3-law-assistant](https://github.com/xugejian/qwen3-law-assistant)
 
+
+
 ## 项目概述
 本项目是基于Qwen3大语言模型的法律领域微调项目，实现了法律智能助手功能。项目采用中文法律问答风格，提供专业的法律问题解答服务。
+
+
 
 ## 技术架构
 
@@ -11,32 +15,51 @@
 
 ### 微调技术
 1. **全参数微调**: 更新模型所有权重参数
+2. **lora微调**: 低秩矩阵微调
 
 ### 推理风格
 - **中文法律问答风格**: 针对不同法律场景优化
 
+
+
 ## 环境说明
 
-### 硬件说明（基于Qwen3-0.6B）
-- **全参数微调**: 32GB内存、8G显存（有条件GPU条件建议16GB+显存）
-- **推理**: 4GB显存（推荐）
+### 硬件
+当前为个人电脑硬件配置，有条件最好能用更高性能显卡
 
-### 软件依赖
+|        | 详情                                   |
+| ------ | -------------------------------------- |
+| 处理器 | Intel(R) Core(TM) i9-14900HX           |
+| core   | 32                                     |
+| 内存   | 32GB                                   |
+| GPU    | NVIDIA GeForce RTX 4060 Laptop GPU 8GB |
+
+
+
+### 软件
 ```bash
+# 基础环境
+python 3.12.11
+CUDA Version: 12.9
+
+# 运行脚本依赖
+torch==2.8.0+cu129        # pytorch
 swanlab                   # 训练监控
-modelscope==1.22.0        # 模型下载
-transformers              # 模型加载
-datasets==3.2.0           # 数据处理
+modelscope==1.30.0        # 模型下载
+transformers==4.55.2      # 模型加载
+datasets==2.21.0          # 数据处理
 accelerate                # 训练加速
 pandas                    # 数据处理
 addict                    # 配置管理
 ```
 
+
+
 ## 快速开始
 
-### 1. 环境安装
+### 1. 下载模型
 ```bash
-pip install -r requirements.txt
+python download_model.py
 ```
 
 ### 2. 数据准备
@@ -48,11 +71,19 @@ python data_law.py
 - 数据预处理和格式化
 - 训练/验证集划分（9:1比例）
 
+
+
 ### 3. 模型训练
 
 #### 全参数微调
-```bash
+```shell
 python train_law.py
+```
+
+**LoRA微调**
+
+```shell
+python train_law_lora_0_6B.py
 ```
 
 
@@ -67,17 +98,34 @@ python train_law.py
 
 访问地址：[SwanLab训练监控](https://swanlab.cn/@CarbonSilicon/qwen3-sft-law/overview)
 
+
+
 ## 模型性能
 
 ### 训练效果对比
-- **全参数微调**: 效果更好，但资源消耗大
+- **全参数微调**: 效果更好，loss下降幅度更大，但资源消耗大
+- **lora微调**: 资源消耗性小，我甚至可以用我8G的显存跑，但是loss下降幅度平缓
 
-### 推理示例
-原模型和微调150步后比对
+<img src="imgs/sft-lora.png">
+
+
+
+### 推理展示
+**原模型和sft微调150步后比对**
 <img src="imgs/qwen-sft150.png">
 
-微调1800步效果
+
+
+**sft微调1800步效果**
 <img src="imgs/qwen-sft1800.png">
+
+
+
+**LoRA微调14250步效果**
+
+<img src="imgs/qwen-lora14250.png">
+
+
 
 ## 注意事项
 
@@ -85,10 +133,14 @@ python train_law.py
 - 本助手仅提供参考建议，不能替代专业律师
 - 所有建议仅供参考，具体法律相关问题请咨询专业律师
 
+
+
 ### 技术限制
 - 模型基于训练数据，可能存在知识局限性
 - 建议结合最新法律书籍使用
 - 定期更新模型以保持准确性
+
+
 
 
 ## 相关资源
